@@ -1,0 +1,21 @@
+eco-sorter/
+│
+├── data/
+│   ├── raw_images/         # Dataset TrashNet ou TACO
+│   ├── documents/          # PDFs des règles de tri (pour le RAG)
+│   └── vectorstore/        # Où ChromaDB stockera ses index
+│
+├── src/
+│   ├── __init__.py
+│   ├── vision_model.py     # Code pour charger et prédire avec le CNN (TensorFlow/Torch)
+│   ├── rag_engine.py       # Code pour créer/interroger la VectorDB
+│   ├── tools.py            # Définition de l'outil API Bruxelles Propreté
+│   └── agent.py            # La chaîne LangChain qui assemble tout
+│
+├── notebooks/              # Pour vos expérimentations (entrainement CNN, test RAG)
+│   ├── 01_train_cnn.ipynb
+│   └── 02_test_langchain.ipynb
+│
+├── app.py                  # L'interface Streamlit (Point d'entrée)
+├── requirements.txt
+└── .env                    # Pour vos clés API (MISTRAL_API_KEY)
