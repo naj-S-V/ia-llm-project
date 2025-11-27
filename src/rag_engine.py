@@ -40,7 +40,7 @@ def create_vector_db(filename, region_name):
         doc.metadata["source"] = filename
         
     # 3. Découpage (Splitting)
-    text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
+    text_splitter = RecursiveCharacterTextSplitter(chunk_size=350, chunk_overlap=50)
     splits = text_splitter.split_documents(docs)
     print(f"Document découpé en {len(splits)} morceaux.")
     
@@ -52,6 +52,34 @@ def create_vector_db(filename, region_name):
     )
     print(f"Succès ! Base de données mise à jour dans {VECTORSTORE_PATH}")
 
+def query_vector_db(question, region_name, n_results=3):
+    """
+    Fonction pour interroger la base vectorielle.
+    Elle cherche les 'n_results' morceaux de textes les plus proches sémantiquement de la question.
+    """
+    # 1. On charge la base existante (pas besoin de recréer)
+    db = Chroma(
+        persist_directory=VECTORSTORE_PATH, 
+        embedding_function=embedding_function
+    )
+    
+    # 2. Recherche par similarité (Similarity Search)
+    # Le filtre est CRUCIAL : on ne veut chercher QUE dans les documents de la région donnée
+    print(f"\n--- Recherche pour : '{question}' ({region_name}) ---")
+    results = db.similarity_search(
+        query=question,
+        k=n_results,
+        filter={"region": region_name} # Filtre metadata
+    )
+    
+    # 3. Affichage des résultats trouvés
+    for i, doc in enumerate(results):
+        print(f"\n[Résultat {i+1}] (Source: {doc.metadata.get('source', 'Inconnue')})")
+        print(doc.page_content)
+        print("-" * 20)
+        
+    return results
+
 if __name__ == "__main__":
     # Test immédiat avec ton fichier texte
     create_vector_db(filename="guide_bruxelles.txt", region_name="bruxelles")
@@ -59,3 +87,11 @@ if __name__ == "__main__":
     # Tu pourras décommenter les lignes suivantes quand tu auras les autres PDF
     # create_vector_db(pdf_filename="guide_namur.pdf", region_name="wallonie")
     # create_vector_db(pdf_filename="guide_anvers.pdf", region_name="flandre")
+
+    # 2. TEST DE RECUPERATION
+    # Testons si le système comprend une question sur la pizza
+    query_vector_db("Dans quel sac mettre une bouteille de javel ?", "bruxelles")
+
+    # Testons une question piège (si tu as mis les règles sur les piles/produits chimiques)
+    query_vector_db("Où jeter un mouchoir ?", "bruxelles")
+    
