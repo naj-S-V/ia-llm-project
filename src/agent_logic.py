@@ -16,7 +16,7 @@ from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_mistralai import ChatMistralAI
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.runnables import RunnablePassthrough
-from langchain_core.output_parsers import StrOutputParser
+#from langchain_core.output_parsers import StrOutputParser
 
 # --- CONFIGURATION DES CHEMINS ---
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -63,37 +63,88 @@ RÉPONSE :
 """
 prompt = ChatPromptTemplate.from_template(template)
 
-# --- 4. CRÉATION DE LA CHAÎNE (Pipeline) ---
+# OLD CHAIN with string parser
+# # --- 4. CRÉATION DE LA CHAÎNE (Pipeline) ---
+# def format_docs(docs):
+#     # Fonction pour "coller" les morceaux de texte ensemble
+#     return "\n\n".join([d.page_content for d in docs])
+
+# rag_chain = (
+#     {"context": retriever | format_docs, "question": RunnablePassthrough()}
+#     | prompt
+#     | llm
+#     | StrOutputParser()
+# )
+
+# --- 4. CHAÎNE (MODIFIÉE) with token usage---
 def format_docs(docs):
-    # Fonction pour "coller" les morceaux de texte ensemble
     return "\n\n".join([d.page_content for d in docs])
 
 rag_chain = (
     {"context": retriever | format_docs, "question": RunnablePassthrough()}
     | prompt
     | llm
-    | StrOutputParser()
 )
 
-# --- FONCTION D'INTERACTION ---
+# OLD VERSION of ask_agent
+# # --- FONCTION D'INTERACTION ---
+# def ask_agent(user_input):
+#     print(f"\n👤 Utilisateur : {user_input}")
+#     print("⏳ Eco-Sorter réfléchit...")
+#     try:
+#         response = rag_chain.invoke(user_input)
+#         print(f"🤖 Eco-Sorter : {response}")
+#         return response
+#     except Exception as e:
+#         print(f"❌ Erreur technique : {e}")
+#         return "Désolé, une erreur est survenue."
+    
+# --- FONCTION D'INTERACTION AVEC MÉTRIQUES ---
 def ask_agent(user_input):
     print(f"\n👤 Utilisateur : {user_input}")
     print("⏳ Eco-Sorter réfléchit...")
+    
     try:
-        response = rag_chain.invoke(user_input)
-        print(f"🤖 Eco-Sorter : {response}")
-        return response
+        # L'invocation renvoie maintenant un objet AIMessage, pas juste une string
+        response_message = rag_chain.invoke(user_input)
+        
+        # 1. Extraction du contenu (La réponse textuelle)
+        content = response_message.content
+        
+        # 2. Extraction des métadonnées (Les Tokens)
+        # Mistral stocke ça dans 'token_usage'
+        token_usage = response_message.response_metadata.get('token_usage', {})
+        input_tokens = token_usage.get('prompt_tokens', 0)
+        output_tokens = token_usage.get('completion_tokens', 0)
+        total_tokens = token_usage.get('total_tokens', 0)
+        
+        print(f"🤖 Eco-Sorter : {content}")
+        
+        # 3. Affichage Green IT (Pour ton rapport)
+        print("-" * 30)
+        print(f"📊 ANALYSE COÛT & CO2 :")
+        print(f"   🔹 Input (Lecture RAG + Question) : {input_tokens} tokens")
+        print(f"   🔹 Output (Réponse générée)      : {output_tokens} tokens")
+        print(f"   🔹 TOTAL                         : {total_tokens} tokens")
+        
+        # Estimation grossière (à affiner pour le rapport)
+        # On estime souvent ~0.04g de CO2 pour 1000 requêtes simples, 
+        # mais c'est mieux de comparer la "densité" de tokens.
+        print("-" * 30)
+        
+        return content
+        
     except Exception as e:
         print(f"❌ Erreur technique : {e}")
-        return "Désolé, une erreur est survenue."
+        return "Erreur."
 
 if __name__ == "__main__":
     # --- ZONE DE TEST ---
     # Test 1 : Facile
-    ask_agent("Où je mets mes épluchures d'orange ?")
+    ask_agent("Où je mets mes peaux d'orange ?")
     
     # Test 2 : Le piège sémantique (Javel)
-    ask_agent("J'ai un vieux bidon d' eau de Javel vide, poubelle bleue ?")
+    ask_agent("J'ai un vieux bidon d'eau de Javel vide.")
     
     # Test 3 : Le piège de la négation (Plastique interdit)
-    ask_agent("Où je jette un seau en plastique cassé ?")
+    #ask_agent("Où je jette un seau en plastique cassé ?")
