@@ -52,7 +52,7 @@ def create_vector_db(filename, region_name):
     )
     print(f"Succès ! Base de données mise à jour dans {VECTORSTORE_PATH}")
 
-def query_vector_db(question, region_name, n_results=3):
+def query_vector_db(question, region_name, n_results=4):
     """
     Fonction pour interroger la base vectorielle.
     Elle cherche les 'n_results' morceaux de textes les plus proches sémantiquement de la question.
@@ -82,7 +82,7 @@ def query_vector_db(question, region_name, n_results=3):
 
 if __name__ == "__main__":
     # Test immédiat avec ton fichier texte
-    create_vector_db(filename="guide_bruxelles.txt", region_name="bruxelles")
+    #create_vector_db(filename="guide_bruxelles.txt", region_name="bruxelles")
     
     # Tu pourras décommenter les lignes suivantes quand tu auras les autres PDF
     # create_vector_db(pdf_filename="guide_namur.pdf", region_name="wallonie")
@@ -90,8 +90,8 @@ if __name__ == "__main__":
 
     # 2. TEST DE RECUPERATION
     # Testons si le système comprend une question sur la pizza
-    query_vector_db("Dans quel sac mettre une bouteille de javel ?", "bruxelles")
+    #query_vector_db("Dans quel sac mettre une bouteille en plastique ?", "bruxelles")
 
     # Testons une question piège (si tu as mis les règles sur les piles/produits chimiques)
-    query_vector_db("Où jeter un mouchoir ?", "bruxelles")
+    query_vector_db("Où jeter une bouteille de produit chimique ?", "bruxelles")
     
