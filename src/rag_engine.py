@@ -91,6 +91,7 @@ if __name__ == "__main__":
     #create_vector_db(filename="guide_charleroi.txt", region_name="charleroi")
     #create_vector_db(filename="guide_mons.txt", region_name="mons")
     #create_vector_db(filename="guide_luxembourg.txt", region_name="luxembourg")
+    #create_vector_db(filename="guide_antwerp.txt", region_name="antwerp")
     
     # Tu pourras décommenter les lignes suivantes quand tu auras les autres PDF
     # create_vector_db(pdf_filename="guide_liege.pdf", region_name="liege")
