@@ -44,7 +44,7 @@ llm = ChatMistralAI(
 # --- 3. DÉFINITION DE LA PERSONNALITÉ (Prompt) ---
 # [cite_start]On utilise les sources [cite: 7, 50] pour définir un agent RAG strict.
 template = """
-Tu es Eco-Sorter, un assistant expert en gestion des déchets pour la région de Bruxelles.
+Tu es Eco-Sorter, un assistant expert en gestion des déchets pour la région : {region_name}.
 Ta mission est d'aider les citoyens à trier correctement pour soutenir l'objectif de développement durable.
 
 CONSIGNES STRICTES :
@@ -99,52 +99,58 @@ rag_chain = (
 #         print(f"❌ Erreur technique : {e}")
 #         return "Désolé, une erreur est survenue."
     
-# --- FONCTION D'INTERACTION AVEC MÉTRIQUES ---
-def ask_agent(user_input):
-    print(f"\n👤 Utilisateur : {user_input}")
-    print("⏳ Eco-Sorter réfléchit...")
+# --- FONCTION D'INTERACTION DYNAMIQUE ---
+def ask_agent(user_input, region="bruxelles"):
+    """
+    Pose une question à l'agent en filtrant par région.
+    region : soit "bruxelles", soit "wallonie"
+    """
+    print(f"\n🌍 Région sélectionnée : {region.upper()}")
+    print(f"👤 Question : {user_input}")
     
     try:
-        # L'invocation renvoie maintenant un objet AIMessage, pas juste une string
+        # A. CRÉATION D'UN RETRIEVER FILTRÉ A LA VOLÉE
+        # C'est l'astuce : on applique le filtre metadata ici
+        retriever = vector_db.as_retriever(
+            search_kwargs={
+                "k": 4,
+                "filter": {"region": region} # <-- LE FILTRE MAGIQUE
+            }
+        )
+        
+        # B. RECONSTRUCTION DE LA CHAINE
+        # On doit recréer la chaine car le retriever a changé
+        rag_chain = (
+            {"context": retriever | format_docs, "question": RunnablePassthrough(), "region_name": lambda x: region}
+            | prompt
+            | llm
+        )
+        
+        # C. INVOCATION
         response_message = rag_chain.invoke(user_input)
         
-        # 1. Extraction du contenu (La réponse textuelle)
+        # D. METRIQUES
         content = response_message.content
-        
-        # 2. Extraction des métadonnées (Les Tokens)
-        # Mistral stocke ça dans 'token_usage'
         token_usage = response_message.response_metadata.get('token_usage', {})
-        input_tokens = token_usage.get('prompt_tokens', 0)
-        output_tokens = token_usage.get('completion_tokens', 0)
-        total_tokens = token_usage.get('total_tokens', 0)
         
-        print(f"🤖 Eco-Sorter : {content}")
-        
-        # 3. Affichage Green IT (Pour ton rapport)
-        print("-" * 30)
-        print(f"📊 ANALYSE COÛT & CO2 :")
-        print(f"   🔹 Input (Lecture RAG + Question) : {input_tokens} tokens")
-        print(f"   🔹 Output (Réponse générée)      : {output_tokens} tokens")
-        print(f"   🔹 TOTAL                         : {total_tokens} tokens")
-        
-        # Estimation grossière (à affiner pour le rapport)
-        # On estime souvent ~0.04g de CO2 pour 1000 requêtes simples, 
-        # mais c'est mieux de comparer la "densité" de tokens.
-        print("-" * 30)
+        print(f"🤖 Eco-Sorter ({region}) : {content}")
+        print(f"📊 Tokens : {token_usage.get('total_tokens', 0)}")
         
         return content
-        
+
     except Exception as e:
-        print(f"❌ Erreur technique : {e}")
-        return "Erreur."
+        print(f"❌ Erreur : {e}")
+        return "Erreur technique."
 
 if __name__ == "__main__":
-    # --- ZONE DE TEST ---
-    # Test 1 : Facile
-    ask_agent("Où je mets mes peaux d'orange ?")
+    # --- TEST DE LA DIFFERENCE REGIONALE ---
     
-    # Test 2 : Le piège sémantique (Javel)
-    ask_agent("J'ai un vieux bidon d'eau de Javel vide.")
+    # Question : Les peau de banane vont où ?
+    # A Bruxelles : Sac orange
+    # En Hainaut : Sac brun
     
-    # Test 3 : Le piège de la négation (Plastique interdit)
-    #ask_agent("Où je jette un seau en plastique cassé ?")
+    print("--- TEST 1 : BRUXELLES ---")
+    ask_agent("Où je jette mes peau de bananes ?", region="bruxelles")
+    
+    print("\n--- TEST 2 : WALLONIE ---")
+    ask_agent("Où je jette mes peau de bananes ?", region="hainaut")
