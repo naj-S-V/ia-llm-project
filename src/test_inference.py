@@ -3,7 +3,7 @@ from pathlib import Path
 import cv2
 import sys
 
-IMAGE_NAME = "paper_2.jpg"
+IMAGE_NAME = "paper.jpg"
 
 # --- 1. CONFIGURATION ROBUSTE DES CHEMINS ---
 # On prend le chemin du fichier actuel, et on remonte aux parents pour trouver la racine
@@ -48,7 +48,7 @@ OUTPUT_DIR = PROJECT_ROOT / "data" / "outputs"
 results = model.predict(
     source=str(IMAGE_PATH), 
     save=True, 
-    conf=0.25,
+    conf=0.5,
     project=str(OUTPUT_DIR),  # On force le dossier de sauvegarde
     name='test_inference',    # Nom du sous-dossier
     exist_ok=True             # Écrase si existe déjà
