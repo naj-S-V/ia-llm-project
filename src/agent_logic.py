@@ -133,10 +133,21 @@ def ask_agent(user_input, region="bruxelles"):
         content = response_message.content
         token_usage = response_message.response_metadata.get('token_usage', {})
         
+        # Préparation des métriques pour l'App ET le Terminal
+        metrics = {
+            "input_tokens": token_usage.get('prompt_tokens', 0),
+            "output_tokens": token_usage.get('completion_tokens', 0),
+            "total_tokens": token_usage.get('total_tokens', 0)
+        }
+
         print(f"🤖 Eco-Sorter ({region}) : {content}")
         print(f"📊 Tokens : {token_usage.get('total_tokens', 0)}")
         
-        return content
+        return {
+            "answer": content,
+            "metrics": metrics,
+            "error": None
+        }
 
     except Exception as e:
         print(f"❌ Erreur : {e}")
