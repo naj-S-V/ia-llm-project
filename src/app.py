@@ -8,18 +8,15 @@ def load_agent_engine():
     from agent_logic import ask_agent
     return ask_agent
 
-# On charge le moteur IA
-ask_agent = load_agent_engine()
+@st.cache_resource
+def load_vision_model():
+    """Charge le modèle CNN une seule fois au démarrage"""
+    from vision_model import predict_waste_type
+    return predict_waste_type
 
-# --- FONCTION MOCK (En attendant le CNN de ton binôme) ---
-def predict_waste_type(image):
-    """
-    Simule le modèle de Computer Vision.
-    Plus tard, tu importeras ici le vrai modèle (Keras/Torch).
-    """
-    time.sleep(1.5) # On simule le temps de calcul
-    # Pour l'instant, on fait semblant de reconnaître une bouteille
-    return "bouteille en plastique"
+# On charge les moteurs IA
+ask_agent = load_agent_engine()
+predict_waste_type = load_vision_model()
 
 # --- 1. CONFIGURATION ---
 st.set_page_config(page_title="Eco-Sorter AI", page_icon="♻️", layout="wide")
@@ -109,7 +106,7 @@ if uploaded_file:
     # BOUTON OUI
     if col_yes.button("✅ Oui, c'est ça"):
         # 1. On affiche le message de l'utilisateur TOUT DE SUITE
-        user_text = f"Où jeter cette {prediction} ?"
+        user_text = f"Où jeter ce déchet qui ressemble à : {prediction} ?"
         st.chat_message("user").markdown(user_text)
         st.session_state.messages.append({"role": "user", "content": user_text})
         
