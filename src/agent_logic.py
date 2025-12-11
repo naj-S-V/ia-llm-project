@@ -51,7 +51,7 @@ CONSIGNES STRICTES :
 1. Utilise UNIQUEMENT le contexte fourni ci-dessous pour répondre.
 2. Si la réponse se trouve dans le contexte, sois précis : dis exactement dans quel sac (Jaune, Bleu, Blanc, Orange, Vert) ou quel lieu (Proxy Chimik, Recypark, Bulles à verre) l'objet doit aller.
 3. Si le contexte mentionne que c'est "INTERDIT" dans un sac, cherche dans le reste du contexte où c'est "AUTORISÉ".
-4. Si tu ne trouves PAS la réponse dans le contexte, dis poliment : "Je n'ai pas l'information précise dans mon guide pour cet objet. Par précaution, vérifiez sur le site de Bruxelles-Propreté." (N'invente rien).
+4. Si tu ne trouves PAS la réponse dans le contexte, dis poliment : "Je n'ai pas l'information précise dans mon guide pour cet objet. Par précaution, vérifiez sur le site de la région : {region_name}." (N'invente rien).
 
 CONTEXTE ISSU DU GUIDE DE TRI :
 {context}
