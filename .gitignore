@@ -1,3 +1,11 @@
+# Environment files
 .venv/
 .env
+
+# Data files
 data/dataset/
+data/vectorstore/
+data/outputs/test_inference_results/
+
+# Python cache files
+__pycache__/
