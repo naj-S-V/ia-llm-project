@@ -1,5 +1,4 @@
 import streamlit as st
-import time
 from PIL import Image
 
 # --- OPTIMISATION VITESSE (CACHE) ---
@@ -13,6 +12,12 @@ def load_vision_model():
     """Charge le modèle CNN une seule fois au démarrage"""
     from vision_model import predict_waste_type
     return predict_waste_type
+
+def prepocess_image(image):
+    """Prépare l'image pour le modèle (si besoin)"""
+    if image.mode != "RGB":
+        image = image.convert("RGB")
+    return image
 
 # On charge les moteurs IA
 ask_agent = load_agent_engine()
@@ -86,7 +91,7 @@ for msg in st.session_state.messages:
 # --- 5. LOGIQUE IMAGE (Nouveau Flow Corrigé) ---
 if uploaded_file:
     # On affiche l'image
-    image = Image.open(uploaded_file)
+    image = prepocess_image(Image.open(uploaded_file))
     st.image(image, caption="Image analysée", width=300)
     
     # Si on n'a pas encore validé cette image, on lance la prédiction (Mock)
@@ -105,8 +110,20 @@ if uploaded_file:
     
     # BOUTON OUI
     if col_yes.button("✅ Oui, c'est ça"):
+        
+        question_mapping = {
+            "carton": "Où jeter un déchet qui ressemble à du carton ?",
+            "plastique": "Où jeter un déchet qui ressemble à du plastique ?",
+            "papier": "Où jeter un déchet qui ressemble à du papier ?",
+            "verre": "Où jeter un déchet qui ressemble à du verre ?",
+            "métal": "Où jeter un déchet qui ressemble à du métal ?",
+            "ordure ménagère": "Où jeter un déchet qui ressemble à une ordure ménagère ?",
+            "déchet": "Où jeter ce déchet ?" #TODO : améliorer pour les ordures non identifiées
+        }
+        
         # 1. On affiche le message de l'utilisateur TOUT DE SUITE
-        user_text = f"Où jeter ce déchet qui ressemble à : {prediction} ?"
+        print("Prediction confirmée :", prediction)
+        user_text = question_mapping.get(prediction.split()[0].lower(), "Où jeter ce déchet ?")
         st.chat_message("user").markdown(user_text)
         st.session_state.messages.append({"role": "user", "content": user_text})
         
