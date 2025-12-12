@@ -1,6 +1,12 @@
 import os
 import sys
 from dotenv import load_dotenv
+from langchain_chroma import Chroma
+from langchain_huggingface import HuggingFaceEmbeddings
+from langchain_mistralai import ChatMistralAI
+from langchain_core.prompts import ChatPromptTemplate
+from langchain_core.runnables import RunnablePassthrough
+#from langchain_core.output_parsers import StrOutputParser
 
 # Chargement des variables d'environnement (récupère la clé depuis .env)
 load_dotenv()
@@ -11,12 +17,6 @@ if not os.getenv("MISTRAL_API_KEY"):
     print("Assure-toi d'avoir créé le fichier .env à la racine du projet.")
     sys.exit(1)
 
-from langchain_chroma import Chroma
-from langchain_huggingface import HuggingFaceEmbeddings
-from langchain_mistralai import ChatMistralAI
-from langchain_core.prompts import ChatPromptTemplate
-from langchain_core.runnables import RunnablePassthrough
-#from langchain_core.output_parsers import StrOutputParser
 
 # --- CONFIGURATION DES CHEMINS ---
 current_dir = os.path.dirname(os.path.abspath(__file__))
