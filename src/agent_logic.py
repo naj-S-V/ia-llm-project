@@ -64,7 +64,6 @@ QUESTION DE L'UTILISATEUR :
 
 RÉPONSE :
 """
-print(f"Prompt défini :\n{template}")
 prompt = ChatPromptTemplate.from_template(template)
 
 # OLD CHAIN with string parser
