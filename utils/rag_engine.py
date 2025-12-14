@@ -83,15 +83,16 @@ def query_vector_db(question, region_name, n_results=4):
 if __name__ == "__main__":
     # Test immédiat avec ton fichier texte
     
-    # create_vector_db(filename="guide_antwerp.txt", region_name="antwerp")
-    # create_vector_db(filename="guide_bruxelles.txt", region_name="bruxelles")    
-    # create_vector_db(filename="guide_bw.txt", region_name="brabant_wallon")
-    # create_vector_db(filename="guide_charleroi.txt", region_name="charleroi")
-    # create_vector_db(filename="guide_hainaut.txt", region_name="hainaut")
-    # create_vector_db(filename="guide_liege.txt", region_name="liege")
-    # create_vector_db(filename="guide_luxembourg.txt", region_name="luxembourg")
-    # create_vector_db(filename="guide_mons.txt", region_name="mons")
-    # create_vector_db(filename="guide_namur.txt", region_name="namur")
+    # 1. CRÉATION DE LA BASE VECTORIELLE (UNE FOIS)
+    create_vector_db(filename="guide_antwerp.txt", region_name="antwerp")
+    create_vector_db(filename="guide_bruxelles.txt", region_name="bruxelles")    
+    create_vector_db(filename="guide_bw.txt", region_name="brabant_wallon")
+    create_vector_db(filename="guide_charleroi.txt", region_name="charleroi")
+    create_vector_db(filename="guide_hainaut.txt", region_name="hainaut")
+    create_vector_db(filename="guide_liege.txt", region_name="liege")
+    create_vector_db(filename="guide_luxembourg.txt", region_name="luxembourg")
+    create_vector_db(filename="guide_mons.txt", region_name="mons")
+    create_vector_db(filename="guide_namur.txt", region_name="namur")
 
     # 2. TEST DE RECUPERATION
     # Testons si le système comprend une question sur la pizza
