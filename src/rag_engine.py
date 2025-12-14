@@ -95,8 +95,13 @@ if __name__ == "__main__":
 
     # 2. TEST DE RECUPERATION
     # Testons si le système comprend une question sur la pizza
-    query_vector_db("Dans quel sac mettre une peau de banane ?", "bruxelles")
-    query_vector_db("Dans quel sac mettre une peau de banane ?", "hainaut")
+    #  query_vector_db("Dans quel sac mettre une commode ?", "antwerp")
+    #  query_vector_db("Où jeter un fauteuil ?", "antwerp")
+    #  query_vector_db("Où jeter une commode ?", "antwerp")
+    #  query_vector_db("Où jeter un canapé ?", "antwerp")
+    #  query_vector_db("Où jeter une machine à laver ?", "antwerp")
+    #  query_vector_db("Où jeter un vêtement ?", "antwerp")
+    #  query_vector_db("Où jeter un t-shirt ?", "antwerp")
 
     # Testons une question piège (si tu as mis les règles sur les piles/produits chimiques)
     #query_vector_db("Où jeter une bouteille de produit chimique ?", "bruxelles")
