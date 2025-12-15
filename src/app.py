@@ -85,7 +85,7 @@ for msg in st.session_state.messages:
                 c2.metric("Output", f"{m['output_tokens']}")
                 
                 # Correction demandée : Afficher CO2 au lieu du Total
-                co2_val = m['total_tokens'] * 0.0004
+                co2_val = m['total_tokens'] * 0.00057  # 0.00057 g CO2 par token
                 c3.metric("Est. CO2", f"{co2_val:.4f} g")
 
 # --- 5. LOGIQUE IMAGE (Nouveau Flow Corrigé) ---
