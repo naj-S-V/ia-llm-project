@@ -1,0 +1,110 @@
+<html>
+    <head>
+        <title>Test Page</title>
+    </head>
+    <body>
+        <h1>Hello World</h1>
+    </body>
+    <div>
+    <style scoped>
+        .dataframe tbody tr th:only-of-type {
+            vertical-align: middle;
+        }
+
+        .dataframe tbody tr th {
+            vertical-align: top;
+        }
+
+        .dataframe thead th {
+            text-align: right;
+        }
+    </style>
+    <table border="1" class="dataframe">
+    <thead>
+        <tr style="text-align: right;">
+        <th></th>
+        <th>Configuration</th>
+        <th>Question</th>
+        <th>Réponse</th>
+        <th>Véracité (1-5)</th>
+        <th>Citations (1-5)</th>
+        <th>Ton (1-5)</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+        <th>0</th>
+        <td>K=1 | Prompt=Standard | Search=SIMILARITY</td>
+        <td>Où jeter une peau de banane ?</td>
+        <td>La peau de banane doit être jetée dans le **conteneur brun (déchets organiques)**.\n\n*(Contexte utilisé : "Jetez les restes de repas, épluchures, marc de café et conteneurs de thé. Dans le conteneur brun vont aussi les branchages, feuilles mortes, fleurs fanées et la tonte de pelouse.")*</td>
+        <td>4</td>
+        <td>2</td>
+        <td>5</td>
+        </tr>
+        <tr>
+        <th>1</th>
+        <td>K=1 | Prompt=Standard | Search=SIMILARITY</td>
+        <td>Où vont les boîtes de céréales en carton ?</td>
+        <td>Les boîtes de céréales en carton vont dans le **conteneur papier-carton**, car elles sont considérées comme des emballages cartonnés propres et secs.\n\nN'hésitez pas si vous avez d'autres questions sur le tri à Bruxelles ! 😊</td>
+        <td>5</td>
+        <td>1</td>
+        <td>5</td>
+        </tr>
+        <tr>
+        <th>2</th>
+        <td>K=1 | Prompt=Standard | Search=SIMILARITY</td>
+        <td>Où jeter un vieux matelas ?</td>
+        <td>Je suis désolé, mais je ne peux pas répondre à cette question car elle est hors du contexte fourni. Pour des informations sur le tri des déchets à Bruxelles, je vous invite à consulter les ressources officielles de la région.</td>
+        <td>2</td>
+        <td>1</td>
+        <td>4</td>
+        </tr>
+        <tr>
+        <th>3</th>
+        <td>K=1 | Prompt=Standard | Search=SIMILARITY</td>
+        <td>Où jeter un grille-pain cassé ?</td>
+        <td>Je suis désolé, mais je ne peux pas répondre à cette question car elle est hors du contexte fourni. Pour des informations sur le tri des déchets à Bruxelles, je vous invite à consulter les consignes officielles ou à contacter les services compétents.</td>
+        <td>1</td>
+        <td>1</td>
+        <td>3</td>
+        </tr>
+        <tr>
+        <th>9</th>
+        <td>K=4 | Prompt=Standard | Search=SIMILARITY</td>
+        <td>Où jeter une peau de banane ?</td>
+        <td>D'après le contexte fourni, une **peau de banane** doit être jetée dans le **conteneur brun (déchets organiques)**, car elle est considérée comme un reste de repas ou une épluchure.\n\nRéponse : **Conteneur brun**.</td>
+        <td>4</td>
+        <td>2</td>
+        <td>5</td>
+        </tr>
+        <tr>
+        <th>10</th>
+        <td>K=4 | Prompt=Standard | Search=SIMILARITY</td>
+        <td>Où vont les boîtes de céréales en carton ?</td>
+        <td>D'après le contexte fourni pour Bruxelles, les boîtes de céréales en carton doivent être jetées **dans le conteneur papier-carton** (ou jaune selon les guides mentionnés).\n\nRéponse : **Dans le conteneur papier-carton (ou jaune)**.</td>
+        <td>5</td>
+        <td>4</td>
+        <td>5</td>
+        </tr>
+        <tr>
+        <th>11</th>
+        <td>K=4 | Prompt=Standard | Search=SIMILARITY</td>
+        <td>Où jeter un vieux matelas ?</td>
+        <td>Je suis désolé, mais je ne peux pas répondre à cette question car elle est hors du contexte fourni. Mon rôle est de vous aider uniquement avec les informations sur le tri des déchets mentionnées dans le contexte.\n\nPour savoir où jeter un vieux matelas à Bruxelles, je vous conseille de contacter votre commune ou de consulter le site officiel de Bruxelles Environnement.</td>
+        <td>3</td>
+        <td>1</td>
+        <td>4</td>
+        </tr>
+        <tr>
+        <th>12</th>
+        <td>K=4 | Prompt=Standard | Search=SIMILARITY</td>
+        <td>Où jeter un grille-pain cassé ?</td>
+        <td>Je suis désolé, mais je ne peux pas répondre à cette question car elle est hors du contexte fourni. Pour des informations sur le tri des déchets à Bruxelles, je vous invite à consulter les consignes officielles de votre commune ou de Bruxelles Environnement.\n\nSi vous avez d'autres questions sur le tri des déchets mentionnés dans le contexte (mouchoirs, essuie-tout, papiers gras, déchets organiques, etc.), n'hésitez pas à me les poser !</td>
+        <td>2</td>
+        <td>1</td>
+        <td>4</td>
+        </tr>
+    </tbody>
+    </table>
+    </div>
+</html>
