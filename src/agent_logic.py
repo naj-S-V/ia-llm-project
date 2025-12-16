@@ -31,7 +31,7 @@ vector_db = Chroma(persist_directory=VECTORSTORE_PATH, embedding_function=embedd
 # RETRIEVER : C'est ici qu'on règle la sensibilité !
 # k=4: On récupère les 4 morceaux les plus proches pour donner un max de contexte au LLM
 # Cela compense le fait que la "Javel" puisse arriver en 4ème.
-retriever = vector_db.as_retriever(search_kwargs={"k": 4})
+retriever = vector_db.as_retriever(search_kwargs={"k": 1})  #avant 4
 
 # --- 2. INITIALISATION DU CERVEAU (LLM) ---
 # 'mistral-large-latest' est le plus intelligent. 
@@ -52,8 +52,8 @@ CONSIGNES STRICTES :
 1. Utilise UNIQUEMENT le contexte fourni ci-dessous pour répondre.
 2. Si la réponse se trouve dans le contexte, sois précis : dis exactement dans quel sac (Jaune, Bleu, Blanc, Orange, Vert) ou quel lieu (Proxy Chimik, Recypark, Bulles à verre) l'objet doit aller.
 3. Si le contexte mentionne que c'est "INTERDIT" dans un sac, cherche dans le reste du contexte où c'est "AUTORISÉ".
-4. Si tu ne trouves PAS la réponse dans le contexte, dis poliment : "Je n'ai pas l'information précise dans mon guide pour cet objet. Par précaution, vérifiez sur le site de la région : {region_name}." (N'invente rien).
-5. Si le question de l'utilisateur n'est PAS en lien avec le tri des déchets, décline poliment la demande en rappelant ta mission.
+4. Si le question de l'utilisateur n'est PAS en lien avec le tri des déchets, décline poliment la demande en rappelant ta mission. Ne corrige pas de mail.
+5. Si tu ne trouves PAS la réponse dans le contexte dis le poliment, n'invente rien et conseil d'aller se renseigner sur le site officiel de la région : {region_name}.
 6. Reste toujours courtois et professionnel.
 7. Cite le document qui t'a fourni tes sources en fin de réponse.
 
@@ -116,9 +116,10 @@ def ask_agent(user_input, region="bruxelles"):
         # A. CRÉATION D'UN RETRIEVER FILTRÉ A LA VOLÉE
         # C'est l'astuce : on applique le filtre metadata ici
         retriever = vector_db.as_retriever(
+            search_type="similarity",  # Multi-modal retrieval
             search_kwargs={
-                "k": 4,
-                "filter": {"region": region} # <-- LE FILTRE MAGIQUE
+                "k": 1, #avant 4
+                "filter": {"region": region} 
             }
         )
         
